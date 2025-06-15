@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Aspiring Engineer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="gear-navbar.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation - Same as index.html */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+
+        .hamburger {
+            width: 30px;
+            height: 3px;
+            background-color: #333;
+            position: relative;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hamburger::before,
+        .hamburger::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hamburger::before {
+            transform: translateY(-10px);
+        }
+
+        .hamburger::after {
+            transform: translateY(10px);
+        }
+
+        .nav-toggle.active .hamburger {
+            background-color: transparent;
+        }
+
+        .nav-toggle.active .hamburger::before {
+            transform: rotate(45deg);
+        }
+
+        .nav-toggle.active .hamburger::after {
+            transform: rotate(-45deg);
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.98);
+            padding-top: 80px;
+            transition: right 0.3s ease-in-out;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Page Specific Styles */
+        .page-content {
+            padding: 120px 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+            position: relative;
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: #333;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .contact-info {
+            padding: 2rem;
+        }
+
+        .contact-heading {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-text {
+            color: #555;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            color: #333;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            padding: 10px;
+        }
+
+        .social-link:hover {
+            color: #007bff;
+        }
+
+        .contact-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .form-textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-menu {
+                width: 100%;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .contact-info {
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .contact-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 1100px) {
+            #pongCanvas {
+                width: 100% !important;
+                height: auto !important;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .contact-game {
+                margin-top: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="gear-navbar">
+        <div class="gear-container">
+            <a href="index.html" class="gear-link" title="Home">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <!-- Top -->
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <!-- Bottom -->
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <!-- Left -->
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <!-- Right -->
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Home</span>
+            </a>
+            <a href="global-experience.html" class="gear-link" title="Projects">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Projects</span>
+            </a>
+            <a href="space-photography.html" class="gear-link" title="Space Photography">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Space Photography</span>
+            </a>
+            <a href="accolades.html" class="gear-link" title="Achievements">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Achievements</span>
+            </a>
+            <a href="contact.html" class="gear-link" title="Contact me">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Contact me</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <h1 class="page-title">Contact Me</h1>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2 class="contact-heading">Let's Connect</h2>
+                <p class="contact-text">I'm always interested in connecting with fellow engineers, science enthusiasts,
+                    and potential collaborators. Feel free to reach out!</p>
+
+                <h3 class="contact-heading">Follow Me</h3>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/aashirya.2007/" target="_blank" class="social-link"
+                        title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/aashirya-sah-802215300/" target="_blank" class="social-link"
+                        title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/Aashirya25" target="_blank" class="social-link" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="contact-game">
+                <h2 class="contact-heading" style="text-align:center; margin-bottom: 2rem;">Try Beat Me!</h2>
+                <canvas id="pongCanvas" width="700" height="400"
+                    style="display: block; margin: 0 auto; background: #ffffff; border: 2px solid #333;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.nav-toggle').addEventListener('click', function () {
+            this.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-toggle').classList.remove('active');
+                document.querySelector('.nav-menu').classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const navMenu = document.querySelector('.nav-menu');
+            const navToggle = document.querySelector('.nav-toggle');
+            if (!navMenu.contains(e.target) && !navToggle.contains(e.target) && navMenu.classList.contains('active')) {
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            // Add your form submission logic here
+            alert('Thank you for your message! I will get back to you soon.');
+            this.reset();
+        });
+    </script>
+
+    <script>
+        const canvas = document.getElementById("pongCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const paddleHeight = 80, paddleWidth = 10;
+        let userY = (canvas.height - paddleHeight) / 2;
+        let aiY = (canvas.height - paddleHeight) / 2;
+        const paddleSpeed = 5;
+
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 8,
+            speedX: 5,
+            speedY: 3
+        };
+
+        let userScore = 0;
+        let aiScore = 0;
+        let gameOver = false;
+        let winnerMessage = "";
+
+        // Control user paddle with mouse
+        canvas.addEventListener("mousemove", function (e) {
+            const rect = canvas.getBoundingClientRect();
+            const mouseY = e.clientY - rect.top;
+            userY = mouseY - paddleHeight / 2;
+            // Clamp paddle within canvas
+            if (userY < 0) userY = 0;
+            if (userY > canvas.height - paddleHeight) userY = canvas.height - paddleHeight;
+        });
+
+        function drawPaddle(x, y) {
+            ctx.fillStyle = "#333";
+            ctx.fillRect(x, y, paddleWidth, paddleHeight);
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "#007bff";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawScores() {
+            ctx.font = "20px Arial";
+            ctx.fillStyle = "#333";
+            ctx.fillText(`Me: ${aiScore}`, 20, 25);
+            ctx.fillText(`You: ${userScore}`, canvas.width - 100, 25);
+        }
+
+        function update() {
+            // Move ball
+            ball.x += ball.speedX;
+            ball.y += ball.speedY;
+
+            // Ball wall collision
+            if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+                ball.speedY *= -1;
+            }
+
+            // AI follows the ball with some imperfection
+            let aiCenter = aiY + paddleHeight / 2;
+            let error = (Math.random() - 0.5) * 30; // AI error margin
+
+            if (aiCenter < ball.y - 35 + error) aiY += paddleSpeed;
+            else if (aiCenter > ball.y + 35 + error) aiY -= paddleSpeed;
+
+            // Clamp AI paddle within canvas
+            if (aiY < 0) aiY = 0;
+            if (aiY > canvas.height - paddleHeight) aiY = canvas.height - paddleHeight;
+
+            // User paddle collision
+            if (
+                ball.x + ball.radius > canvas.width - paddleWidth &&
+                ball.y > userY && ball.y < userY + paddleHeight
+            ) {
+                ball.speedX *= -1.1; // Reverse and increase speed
+                ball.speedY *= 1.05; // Slightly increase Y speed
+            }
+
+            // AI paddle collision
+            if (
+                ball.x - ball.radius < paddleWidth &&
+                ball.y > aiY && ball.y < aiY + paddleHeight
+            ) {
+                ball.speedX *= -1.1; // Reverse and increase speed
+                ball.speedY *= 1.05; // Slightly increase Y speed
+            }
+
+            // Score update
+            if (ball.x + ball.radius > canvas.width) {
+                aiScore++;
+                resetBall();
+            } else if (ball.x - ball.radius < 0) {
+                userScore++;
+                resetBall();
+            }
+
+            // Check for game over
+            if (userScore >= 10) {
+                gameOver = true;
+                winnerMessage = "You win! Congratulations!";
+            } else if (aiScore >= 10) {
+                gameOver = true;
+                winnerMessage = "Haha you lost! Better luck next time!";
+            }
+        }
+
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            ball.speedX = 5 * (Math.random() > 0.5 ? 1 : -1); // Reset to initial speed, random direction
+            ball.speedY = 3 * (Math.random() > 0.5 ? 1 : -1);
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPaddle(0, aiY); // AI
+            drawPaddle(canvas.width - paddleWidth, userY); // User
+            drawBall();
+            drawScores();
+            if (!gameOver) {
+                update();
+                requestAnimationFrame(gameLoop);
+            } else {
+                // Show winner message
+                ctx.save();
+                ctx.font = "40px Arial";
+                ctx.fillStyle = "#007bff";
+                ctx.textAlign = "center";
+                ctx.fillText(winnerMessage, canvas.width / 2, canvas.height / 2);
+                ctx.restore();
+            }
+        }
+
+        gameLoop();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Photography</title>
+    <link rel="stylesheet" href="gear-navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-content {
+            padding: 120px 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+            position: relative;
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        .instagram-card {
+            width: 320px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+
+        .instagram-card:hover {
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .insta-profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-top: 2rem;
+            object-fit: cover;
+            border: 4px solid #C13584;
+        }
+
+        .insta-info {
+            margin: 1.5rem 0;
+        }
+
+        .insta-username {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #262626;
+        }
+
+        .insta-follow {
+            color: #C13584;
+            font-size: 1rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .insta-icon {
+            color: #C13584;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Photo Gallery Styles */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover .photo-caption {
+            transform: translateY(0);
+        }
+
+        /* Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .photo-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="gear-navbar">
+        <div class="gear-container">
+            <a href="index.html" class="gear-link" title="Home">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <!-- Top -->
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <!-- Bottom -->
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <!-- Left -->
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <!-- Right -->
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Home</span>
+            </a>
+            <a href="global-experience.html" class="gear-link" title="Projects">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Projects</span>
+            </a>
+            <a href="space-photography.html" class="gear-link" title="Space Photography">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Space Photography</span>
+            </a>
+            <a href="accolades.html" class="gear-link" title="Achievements">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Achievements</span>
+            </a>
+            <a href="contact.html" class="gear-link" title="Contact me">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Contact me</span>
+            </a>
+        </div>
+    </nav>
+    <div class="page-content">
+        <h1 class="page-title">Space Photography</h1>
+        <div class="instagram-card" onclick="window.open('https://www.instagram.com/stellar.shotss/', '_blank')">
+            <i class="fab fa-instagram insta-icon"></i>
+            <img src="Moon.jpg" alt="Instagram Profile" class="insta-profile-pic">
+            <div class="insta-info">
+                <span class="insta-username">@stellar.shotss</span>
+                <span class="insta-follow">View on Instagram</span>
+            </div>
+        </div>
+
+        <!-- Photo Gallery Section -->
+        <div class="photo-gallery">
+            <!-- Example photo items - Add your photos and captions here -->
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="supermoon2024.png" alt="Moon Crater">
+                <div class="photo-caption">
+                    <h3>Last supermoon of 2024 🔭</h3>
+                    <p>Taken from my balcony. Goodbye 2024!</p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="Moon2025.png" alt="Jupiter">
+                <div class="photo-caption">
+                    <h3>First moon of 2025 🌙</h3>
+                    <p>Captured on the 3rd-4th of January 2025🌒</p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="3rdjan.png" alt="Saturn">
+                <div class="photo-caption">
+                    <h3>Waxing crescent phase</h3>
+                    <p>✨ Captured on 3rd January I'm so proud of how this turned out—it looks absolutely majestic! </p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="craters.png" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>First quarter moon </h3>
+                    <p>Captured on the 6th of January 🌗 if you look closely, you'll notice a slight blue glow around
+                        the edge. That's not a camera glitch — it's actually chromatic aberration, a common optical
+                        effect where different colors of light don't focus perfectly together. It happens because lenses
+                        bend blue light more than red light.</p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="6thJan.png" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>First quarter moon </h3>
+                    <p>Captured on the 6th of January 🌗 The Apollo 11, 15, 16, and 17 landing sites are now visible in
+                        the illuminated section, while Apollo 12 and 14 remain on the dark side.</p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="Jupiter.png" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>Jupiter and its Moons </h3>
+                    <p>Captured on the 10th of January. Jupiter with its Galilean moons lined up. Really cool to catch a
+                        whole mini solar system in one shot. </p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="Jupiter2.png" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>Caught Jupiter again </h3>
+                    <p>Captured on the 11th of January. Those four tiny dots lined up beside it are its four largest
+                        moons: Io, Europa, Ganymede, and Callisto. They're called the Galilean moons — visible even
+                        through small telescopes because they orbit in a straight line along Jupiter's equator.
+                        The glow and starburst around the planet come from the camera lens reacting to how bright
+                        Jupiter is compared to its moons. </p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="Wolf Moon.png" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>Wolf Moon 🌕✨. </h3>
+                    <p>First full moon of 2025. It gets its name from the haunting howls of wolves heard echoing outside
+                        villages in wintertime long ago ❄️. </p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="Mars.png" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>Mars! </h3>
+                    <p>Spotted this glowing red dot through my telescope and instantly knew it had to be Mars. The
+                        reddish hue is its natural color, thanks to all the iron oxide (rust!) on its surface. </p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="Redplanet.png" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>The Red Planet! Our future home? </h3>
+                    <p>This glowing dot in my telescope is hiding some wild stuff. It's home to the largest volcano in
+                        the solar system, Olympus Mons. Scientists found signs of ancient riverbeds, there might be
+                        frozen water underground at the poles. Crazy to believe this little red dot might've once been
+                        alive.
+                    </p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="sneakymoon.png" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>Mars is that you?</h3>
+                    <p>Not Mars — this is actually the Moon 🔥🌕
+                        The red glow came from Earth's atmosphere bending the light while I was photographing through
+                        the telescope.
+                        You can still see the craters along the edge, right where the light meets the dark — that line
+                        is called the terminator. The deep orange tint caused by Rayleigh scattering
+                    </p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <video width="100%" autoplay loop muted playsinline>
+                    <source src="vidstar.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="photo-caption">
+                    <h3>A light Show! (use chrome to view video)</h3>
+                    <p>
+                        What you're seeing isn't the star changing shape — it's the atmosphere, my telescope, and my
+                        camera sensor all playing optical tricks. Between atmospheric turbulence, chromatic aberration,
+                        and a very bright star, I ended up catching this rainbow explosion in the eyepiece.
+                        It's chaotic, but kind of beautiful.
+                    </p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="sun.jpg" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>Cant forget about the sun!</h3>
+                    <p>This might just look like a blurry white ball…
+                        But it's actually the Sun, and those tiny dark spots? Sunspots — cooler, magnetically active
+                        regions on the surface caused by twisted magnetic fields.
+                        I'm basically looking at giant magnetic storms on a star, 150 million km away.
+                        Also: don't worry, I used a solar filter. I love my eyes.
+                    </p>
+                </div>
+            </div>
+            <div class="photo-item" onclick="openLightbox(this)">
+                <img src="setup.jpeg" alt="Description of photo">
+                <div class="photo-caption">
+                    <h3>My set up</h3>
+                    <p>It's nothing fancy — just a curious teenager with access to a balcony from my room. I don't have
+                        a professional camera, so I use my iPhone, and the tripod helps keep it steady.
+                        I still have to adjust it every so often because of the Earth's rotation — the Moon and Sun
+                        slowly drift out of frame, so I move the telescope to follow them.
+                        Not the most high-tech setup… but it works. And I've learned more from doing this than I ever
+                        expected (check out my blog to know more).
+
+                    </p>
+                </div>
+            </div>
+
+
+            <!-- Add more photo items as needed -->
+        </div>
+
+        <!-- Lightbox -->
+        <div class="lightbox" id="lightbox">
+            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+            <div class="lightbox-content">
+                <img src="" alt="" id="lightbox-img">
+                <div class="lightbox-caption" id="lightbox-caption"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openLightbox(element) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+
+            lightboxImg.src = element.querySelector('img').src;
+            lightboxCaption.innerHTML = element.querySelector('.photo-caption').innerHTML;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+        }
+
+        // Close lightbox when clicking outside the image
+        document.getElementById('lightbox').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+
+</html>

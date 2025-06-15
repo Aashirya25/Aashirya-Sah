@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects</title>
+    <link href="gear-navbar.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation - Same as index.html */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+
+        .hamburger {
+            width: 30px;
+            height: 3px;
+            background-color: #333;
+            position: relative;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hamburger::before,
+        .hamburger::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hamburger::before {
+            transform: translateY(-10px);
+        }
+
+        .hamburger::after {
+            transform: translateY(10px);
+        }
+
+        .nav-toggle.active .hamburger {
+            background-color: transparent;
+        }
+
+        .nav-toggle.active .hamburger::before {
+            transform: rotate(45deg);
+        }
+
+        .nav-toggle.active .hamburger::after {
+            transform: rotate(-45deg);
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.98);
+            padding-top: 80px;
+            transition: right 0.3s ease-in-out;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-menu.active {
+            right: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Page Specific Styles */
+        .page-content {
+            padding: 120px 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+            position: relative;
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: #333;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        .country-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .country-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .country-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .country-content {
+            padding: 1.5rem;
+        }
+
+        .country-name {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .country-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .country-description {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .project-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .project-name {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .project-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .project-demo-link {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background-color: #A31F34;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background 0.2s;
+            align-self: flex-start;
+        }
+
+        .project-demo-link:hover {
+            background-color: #7a1626;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-menu {
+                width: 100%;
+            }
+
+            .experience-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="gear-navbar">
+        <div class="gear-container">
+            <a href="index.html" class="gear-link" title="Home">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <!-- Top -->
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <!-- Bottom -->
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <!-- Left -->
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <!-- Right -->
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Home</span>
+            </a>
+            <a href="global-experience.html" class="gear-link" title="Projects">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Projects</span>
+            </a>
+            <a href="space-photography.html" class="gear-link" title="Space Photography">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Space Photography</span>
+            </a>
+            <a href="accolades.html" class="gear-link" title="Achievements">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Achievements</span>
+            </a>
+            <a href="contact.html" class="gear-link" title="Contact me">
+                <svg class="gear-svg" viewBox="0 0 100 100">
+                    <g>
+                        <circle cx="50" cy="50" r="22" fill="#8b959e" />
+                        <g fill="#8b959e">
+                            <g>
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                            <g transform="rotate(45 50 50)">
+                                <rect x="45" y="20" width="10" height="12" rx="2" />
+                                <rect x="45" y="68" width="10" height="12" rx="2" />
+                                <rect x="20" y="45" width="12" height="10" rx="2" />
+                                <rect x="68" y="45" width="12" height="10" rx="2" />
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="gear-label">Contact me</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <h1 class="page-title">Projects</h1>
+        <div class="experience-grid">
+
+            <div class="project-card">
+                <img src="Lung.png" alt="Lung Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Lung Infection Detection using CNN</h2>
+                    <p class="project-description">A deep learning model that detects lung infections from X-ray images
+                        using CNN.</p>
+                    <a href="https://colab.research.google.com/drive/1yrgRKHzemsIdYcwVJ7gjU4V8K5oRXifP#scrollTo=W_wpcdoL-5Lb"
+                        class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Monkey.png" alt="Monkey Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Monkey Chunky App</h2>
+                    <p class="project-description">Made using Expo and React Native, Monkey Chunky App is designed to
+                        help early stage readers practice reading words. The user can enter any word and the app will
+                        break it down into phonic chunks. User can tap on the phonic chunks to hear the corresponding
+                        sound of the phones that make the word.</p>
+                    <a href="https://github.com/Aashirya25/Monkey-Chunky" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="ISS.png" alt="ISS Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">ISS tracker</h2>
+                    <p class="project-description">An app that tracks the ISS and shows the current location of the ISS
+                        along with meteor information.</p>
+                    <a href="https://snack.expo.dev/@aashiryasah/iss-tracker?platform=android" class="project-demo-link"
+                        target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Corona2.png" alt="Corona Warrior Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Corona Warrior Version 2.0</h2>
+                    <p class="project-description">A fun shooter game where you collect masks and avoid virusus to raise
+                        awareness about Corona virus.</p>
+                    <a href="https://aashirya25.github.io/Die-corona/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Corona.png" alt="Corona Warrior Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Corona Warrior</h2>
+                    <p class="project-description">A fun shooter game where you help lungs stay virus free to raise
+                        awareness about Corona virus.</p>
+                    <a href="https://aashirya25.github.io/Corona-warrior-/" class="project-demo-link"
+                        target="_blank">Live Demo</a>
+                </div>
+            </div>
+            <!-- Add more project cards below as needed -->
+            <div class="project-card">
+                <img src="Trex.png" alt="Trex Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Trex game</h2>
+                    <p class="project-description">Recreation of the famous Google Chrome Trex game.</p>
+                    <a href="https://aashirya25.github.io/Trex-game/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Kangaroo.png" alt="Kangaroo Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Kangaroo Hopper</h2>
+                    <p class="project-description">Using animations to create a dynamic game.</p>
+                    <a href="https://aashirya25.github.io/project-39/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Astronaut.png" alt="Astronaut Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Day in the life of an astronaut</h2>
+                    <p class="project-description">Using animations to create a day in the life of an astronaut.</p>
+                    <a href="https://aashirya25.github.io/project-20/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Balloon.png" alt="Balloon Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Balloon Shooter</h2>
+                    <p class="project-description">Recreation of common carnival balloon shooter game.</p>
+                    <a href="https://aashirya25.github.io/project-14-baloon-buster/" class="project-demo-link"
+                        target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Angry.png" alt="Angry Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Recreation of Angry Birds</h2>
+                    <p class="project-description">My attempt to recreate the famous Angry Birds game.</p>
+                    <a href="https://aashirya25.github.io/project-34-capstone-class/" class="project-demo-link"
+                        target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Bunny.png" alt="Bunny Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Bunny Cut the rope</h2>
+                    <p class="project-description">My version of the famous Cut the rope game.</p>
+                    <a href="https://aashirya25.github.io/class-33/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Archery.png" alt="Archery Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Epic Archery</h2>
+                    <p class="project-description">Using physics engine to create a archery game.</p>
+                    <a href="https://aashirya25.github.io/project-28/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Shoot.png" alt="shoot Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Shooting Range</h2>
+                    <p class="project-description">Dont let the grenade hit the you soldier.</p>
+                    <a href="https://aashirya25.github.io/Project-42/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Zombie.png" alt="Zombie Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Zombie Simulation</h2>
+                    <p class="project-description">Using physics engine to create a zombie simulation. Figure out how to
+                        kill the zombie.</p>
+                    <a href="https://aashirya25.github.io/project-31/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Ghost.png" alt="Ghost Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Ghost Runner</h2>
+                    <p class="project-description">Use space and arrow keys to climb the tower and jump on windows.</p>
+                    <a href="https://aashirya25.github.io/Ghost-Runner-Game/" class="project-demo-link"
+                        target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Newton.png" alt="Newton Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Newton's Cradle</h2>
+                    <p class="project-description">Using physics engine to create a Newton's Cradle. Use up arrow.</p>
+                    <a href="https://aashirya25.github.io/Newtons-cradle-project-22/" class="project-demo-link"
+                        target="_blank">Live Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <img src="Dock.png" alt="Dock Screenshot" class="project-image">
+                <div class="project-content">
+                    <h2 class="project-name">Docking Simulation</h2>
+                    <p class="project-description">Use your arrow keys to dock the spaceship.</p>
+                    <a href="https://aashirya25.github.io/Project-43/" class="project-demo-link" target="_blank">Live
+                        Demo</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.nav-toggle').addEventListener('click', function () {
+            this.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-toggle').classList.remove('active');
+                document.querySelector('.nav-menu').classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const navMenu = document.querySelector('.nav-menu');
+            const navToggle = document.querySelector('.nav-toggle');
+            if (!navMenu.contains(e.target) && !navToggle.contains(e.target) && navMenu.classList.contains('active')) {
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+
+</html>

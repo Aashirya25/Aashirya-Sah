@@ -1,0 +1,62 @@
+/* Gear Navigation Styles */
+.gear-navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    background: transparent;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.gear-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-end;
+}
+
+.gear-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+}
+
+.gear-svg {
+    width: 70px;
+    height: 70px;
+    display: block;
+    transition: transform 0.3s;
+    z-index: 1;
+}
+
+.gear-svg circle,
+.gear-svg rect {
+    fill: #8b959e;
+}
+
+.gear-link:hover .gear-svg {
+    transform: rotate(45deg);
+    filter: drop-shadow(0 2px 8px #007bff55);
+}
+
+.gear-label {
+    margin-top: 8px;
+    font-size: 1rem;
+    color: #222;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .gear-svg {
+        width: 40px;
+        height: 40px;
+    }
+
+    .gear-label {
+        font-size: 0.7rem;
+    }
+}
